@@ -101,9 +101,7 @@ const App = () => {
   }
 
   const onButtonSubmit = (event) =>{
-
-   
-
+    
     fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(input))
       .then(response => response.json())
       .then(result => console.log(result))
