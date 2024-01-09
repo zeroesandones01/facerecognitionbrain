@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Signin = ({ onRouteChange }) => {
+const Signin = ({ onRouteChange, loadUser }) => {
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
 
@@ -13,7 +13,7 @@ const Signin = ({ onRouteChange }) => {
   };
 
   const onSubmitSignIn = () => {
-    console.log(signInEmail, signInPassword);
+    // console.log(signInEmail, signInPassword);
     fetch('http://localhost:3001/signin', {
       method: 'post',
       headers: {'Content-type': 'application/json'},
@@ -23,26 +23,14 @@ const Signin = ({ onRouteChange }) => {
       })
     })
     .then(response => response.json())
-    .then(data => {
-      if (data === 'success') {
+    .then(user => {
+      if(user.id) {
+        console.log('Logged in');
+        loadUser(user);
         onRouteChange('home');
       }
     });
-   
-
-    // fetch('http://localhost:3000/signin', {
-    //   method: 'post',
-    //   headers: {'Content-type': 'application/json'},
-    //   body: JSON.stringify({
-    //     email: signInEmail,
-    //     password: signInPassword
-    //   })
-    // }).then(response => response.json())
-    // .then(data => {
-    //   if (data === 'success') {
-    //     onRouteChange('home');
-    //   }
-    // })
+  
   };
 
   return (

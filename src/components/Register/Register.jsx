@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 
-const Register = ({onRouteChange}) => {
+const Register = ({onRouteChange, loadUser}) => {
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [registerName, setRegisterName] = useState('');
