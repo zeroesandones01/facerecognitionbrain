@@ -13,24 +13,26 @@ const Signin = ({ onRouteChange, loadUser }) => {
   };
 
   const onSubmitSignIn = () => {
-    // console.log(signInEmail, signInPassword);
+    //console.log(signInEmail, signInPassword);
     fetch('http://localhost:3001/signin', {
       method: 'post',
       headers: {'Content-type': 'application/json'},
       body: JSON.stringify({
         email: signInEmail,
-        password: signInPassword
+        password: signInPassword,
+        
       })
     })
     .then(response => response.json())
     .then(user => {
       if(user.id) {
-        console.log('Logged in');
+        console.log('vbalue',user);
         loadUser(user);
+        
         onRouteChange('home');
       }
     });
-  
+    
   };
 
   return (
