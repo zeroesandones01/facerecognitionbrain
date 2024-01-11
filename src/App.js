@@ -74,15 +74,18 @@ const App = () => {
   });
 
   const loadUser = (data) => {
-    console.log('Laod user', data);
-  
-    setUser(Object.assign(user, { 
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      entries: data.entries,
-      joined: data.joined
-    }));
+    //console.log('Laod user', data);
+    setUser(Object.assign(user, { id: data.id, name: data.name, email: data.email, entries: data.entries, joined: data.joined }));
+
+    // setUser({user: {
+    //   id: data.id,
+    //   name: data.name,
+    //   email: data.email,
+    //   entries: data.entries,
+    //   joined: data.joined
+    // }})
+    // console.log('user', user.email);
+    // console.log('entries', user.entries);
   }
 
   const calculateFaceLocation = (data) => {
