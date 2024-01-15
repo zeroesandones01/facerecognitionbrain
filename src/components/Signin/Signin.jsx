@@ -30,6 +30,7 @@ const Signin = ({ onRouteChange, loadUser }) => {
         loadUser(user);
         
         onRouteChange('home');
+        
       }
     });
     

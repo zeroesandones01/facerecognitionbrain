@@ -15,51 +15,32 @@ import './App.css';
 // of the image we want as an input. Change these strings to run your own example.
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-const returnClarifaiRequestOptions = (imageUrl) => {
-  // Your PAT (Personal Access Token) can be found in the portal under Authentification
-  const PAT = 'd5e368a447be4417b67d25aa623eca03';
-  // Specify the correct user_id/app_id pairings
-  // Since you're making inferences outside your app's scope
-  const USER_ID = 'jlfclarifai';
-  const APP_ID = 'test';
-  // Change these to whatever model and image URL you want to use
-  const MODEL_ID = 'face-detection';
-  const IMAGE_URL = imageUrl;
 
-  const raw = JSON.stringify({
-    "user_app_id": {
-      "user_id": USER_ID,
-      "app_id": APP_ID
-    },
-    "inputs": [
-      {
-        "data": {
-          "image": {
-            "url": IMAGE_URL
-          }
-        }
-      }
-    ]
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Key ' + PAT
-    },
-    body: raw
-  };
-
-  return requestOptions;
-}
 
 //functional component
 /**
  * Represents the main component of the application.
  * @returns {JSX.Element} The rendered App component.
  */
+
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
 const App = () => {
+  // initialState();
+
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [box, setBox] = useState({});
@@ -95,10 +76,6 @@ const App = () => {
       rightCol: width - (clarifaiFace.right_col * width),
       bottomRow: height - (clarifaiFace.bottom_row * height)
     };
-    // } else {
-    //   console.error('Unexpected data structure', data);
-    //   return null;
-    // }
   }
 
   const displayFaceBox = (box) => {
@@ -110,40 +87,35 @@ const App = () => {
     setInput(event.target.value);
   }
 
-  /**
-   * Handles the button submit event.
-   */
-  // const onButtonSubmit = () => {
-  //   setImageUrl(input);
-  //   //console.log(input);
-  //   fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", returnClarifaiRequestOptions(input))
-  //     .then(response => response.json())
-  //     .then(response => displayFaceBox(calculateFaceLocation(response))
-
-  //     )
-  //     .catch(error => console.log('error', error));
-  // }
-
   const onButtonSubmit = () => {
     setImageUrl(input);
-    //console.log(input);
-    fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", returnClarifaiRequestOptions(input))
+    console.log(input);
+    fetch('http://localhost:3001/imageurl', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: input
+        })
+      })
       .then(response => response.json())
       .then(response => {
-        displayFaceBox(calculateFaceLocation(response))
+
+       
         if (response) {
           fetch('http://localhost:3001/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              id: user.user.id
+              id: user.id
             })
           })
             .then(response => response.json())
             .then(count => {
               setUser(Object.assign(user, { entries: count }))
             })
+            .catch(console.log)
         }
+        displayFaceBox(calculateFaceLocation(response))
 
       })
       .catch(error => console.log('error', error));
